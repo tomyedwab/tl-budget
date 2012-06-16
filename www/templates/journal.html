@@ -1,0 +1,157 @@
+<!-- This file is never actually navigated to.
+     It is loading using AJAX and used as a template set. -->
+
+<!-- JOURNAL: The tabbed interface for the monthly journal -->
+<script type="text/x-handlebars-template" id="journal_tmpl">
+<div class="journal-tabs">
+  <ul>
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#incomes">Incomes</a></li>
+    <li><a href="#expenses">Expenses</a></li>
+    <li><a href="#cash-transfers">Cash Transfers</a></li>
+  </ul>
+  <div id="summary"></div>
+  <div id="incomes"></div>
+  <div id="expenses"></div>
+  <div id="cash-transfers"></div>
+</div>
+</script>
+
+<!-- JOURNAL / SUMMARY: Transfers & expenses summary -->
+<script type="text/x-handlebars-template" id="journal_summary_tmpl">
+<div class="journal_summary">
+
+  {{#if allocTable}}
+  <table cellspacing="8">
+    <tr>
+      <td></td>
+      {{#each allocTable}}
+      <td>{{ fund }}</td>
+      <td></td>
+      {{/each}}
+      <td>NET WORTH</td>
+    </tr>
+    <tr>
+      <td>Before</td>
+      {{#each allocTable}}
+      <td align="right">{{int_to_currency preAmount }}</td>
+      <td></td>
+      {{/each}}
+      <td align="right">{{int_to_currency allocTotals.preAmount }}</td>
+    </tr>
+    <tr>
+      <td>Income</td>
+      {{#each allocTable}}
+      <td align="right">+{{int_to_currency alloc }}</td>
+      <td></td>
+      {{/each}}
+      <td align="right">+{{int_to_currency allocTotals.alloc }}</td>
+    </tr>
+    <tr>
+      <td>Expenses</td>
+      {{#each allocTable}}
+      <td align="right">-{{int_to_currency expenses }}</td>
+      <td>({{percentage expenses alloc }})</td>
+      {{/each}}
+      <td align="right">-{{int_to_currency allocTotals.expenses }}</td>
+      <td>({{percentage allocTotals.expenses allocTotals.alloc }})</td>
+    </tr>
+    <tr>
+      <td>Net change</td>
+      {{#each allocTable}}
+      <td align="right">{{diff expenses alloc}}</td>
+      <td></td>
+      {{/each}}
+      <td align="right">{{diff allocTotals.expenses allocTotals.alloc }}</td>
+    </tr>
+    <tr>
+      <td>{{#if toSavingsPositive}}To savings{{else}}From savings:{{/if}}</td>
+      <td align="right">{{int_to_currency fromLivingExpenses}}</td>
+      <td></td>
+      <td align="right">{{#if toSavingsPositive}}+{{/if}}{{int_to_currency toSavings}}</td>
+    </tr>
+    <tr>
+      <td>After</td>
+      {{#each allocTable}}
+      <td align="right">{{int_to_currency postAmount }}</td>
+      <td></td>
+      {{/each}}
+      <td align="right">{{int_to_currency allocTotals.postAmount }}</td>
+    </tr>
+  </table>
+  {{/if}}
+<div>
+</script>
+
+<!-- JOURNAL / EXPENSE: An expense transaction -->
+<script type="text/x-handlebars-template" id="journal_expense_tmpl">
+<div class="journal_transaction row0">
+  <div class="journal_date">{{ simpleDate }}</div>
+
+  <div class="journal_row">
+    <div class="journal_pad">&nbsp;</div>
+    <div class="journal_description">{{ description }}</div>
+    <div class="journal_description">{{ location }}</div>
+    <div class="journal_description">{{ accountName }}</div>
+    <div class="journal_amount account_expense">{{int_to_currency amount }}</div>
+  </div>
+</div>
+</script>
+
+<!-- JOURNAL / EXPENSE: The total expenses -->
+<script type="text/x-handlebars-template" id="journal_expense_total_tmpl">
+<div class="journal_transaction row0">
+  <div class="journal_date"></div>
+
+  <div class="journal_row">
+    <div class="journal_pad">&nbsp;</div>
+    <div class="journal_description"><b>TOTAL</b></div>
+    <div class="journal_description">&nbsp;</div>
+    <div class="journal_description">&nbsp;</div>
+    <div class="journal_amount account_expense">{{int_to_currency total }}</div>
+  </div>
+</div>
+</script>
+
+<!-- JOURNAL / CASH TRANSFER: A cash transfer transaction -->
+<script type="text/x-handlebars-template" id="journal_cash_transfer_tmpl">
+<div class="journal_transaction row0">
+  <div class="journal_date">{{ simpleDate }}</div>
+
+  <div class="journal_row">
+    <div class="journal_pad">&nbsp;</div>
+    <div class="journal_description">{{ description }}</div>
+    <div class="journal_description">{{ fromAccountName }}</div>
+    <div class="journal_description">{{ toAccountName }}</div>
+    <div class="journal_amount account_cash">{{int_to_currency amount }}</div>
+  </div>
+</div>
+</script>
+
+<!-- JOURNAL / INCOME: An income transaction -->
+<script type="text/x-handlebars-template" id="income_entry_tmpl">
+<div class="journal_transaction row0">
+  <div class="journal_date">{{ simpleDate }}</div>
+
+  <div class="journal_row">
+    <div class="journal_pad">&nbsp;</div>
+    <div class="journal_description">{{ description }}</div>
+    <div class="journal_description">{{ accountName }}</div>
+    <div class="journal_amount account_income">{{ int_to_currency amount }}</div>
+  </div>
+</div>
+</script>
+
+<!-- JOURNAL / INCOME: The total incomes -->
+<script type="text/x-handlebars-template" id="journal_income_total_tmpl">
+<div class="journal_transaction row0">
+  <div class="journal_date"></div>
+
+  <div class="journal_row">
+    <div class="journal_pad">&nbsp;</div>
+    <div class="journal_description">TOTAL</div>
+    <div class="journal_description">&nbsp;</div>
+    <div class="journal_amount account_income">{{ int_to_currency total }}</div>
+  </div>
+</div>
+</script>

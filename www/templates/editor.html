@@ -1,0 +1,216 @@
+<!-- This file is never actually navigated to.
+     It is loading using AJAX and used as a template set. -->
+
+<!-- EDITOR: The main editor UI -->
+<script type="text/html" id="trans_editor_main">
+<div>
+  <input name="date" size="10" data-bind="dateValue: date"></input>
+  <select data-bind="value: type">
+    <option value="expense" selected>Expense</option>
+    <option value="cash_transfer">Cash Transfer</option>
+    <option value="income">Income</option>
+    <option value="fund_transfer">Fund Transfer</option>
+    <option value="custom">Custom</option>
+  </select>
+</div>
+<div id="trans-entries">
+
+  <div class="trans-block" data-bind="visible: type() == 'expense' || type() == 'cash_transfer' || type() == 'income' || type() == 'loan' || type() == 'custom'">
+    <div>
+      <div class="heading col1">&nbsp;</div>
+      <div class="heading col2">Out</div>
+      <div class="heading col3">In</div>
+      <div class="heading col4">Cash Account</div>
+    </div>
+    <div id="trans-credit-block" class="contents" data-bind="template:{name:'trans_entry_tmpl',foreach:cashAccounts()}"></div>
+    <div>
+      <a class="button add-entry" onclick="TL_TransactionEditor.addEntry('cash')"><span>+ Cash</span></a>
+    </div>
+  </div>
+
+  <div class="trans-block" data-bind="visible: type() == 'expense' || type() == 'custom'">
+    <div>
+      <div class="heading col1">&nbsp;</div>
+      <div class="heading col2">Refund</div>
+      <div class="heading col3">Expense</div>
+      <div class="heading col4">Expense Account</div>
+    </div>
+    <div id="trans-credit-block" class="contents" data-bind="template:{name:'trans_entry_tmpl',foreach:expenseAccounts()}"></div>
+    <div>
+      <a class="button add-entry" onclick="TL_TransactionEditor.addEntry('expense')"><span>+ Expense/Refund</span></a>
+    </div>
+  </div>
+
+  <div class="trans-block" data-bind="visible: type() == 'income' || type() == 'custom'">
+    <div>
+      <div class="heading col1">&nbsp;</div>
+      <div class="heading col2">Gain</div>
+      <div class="heading col3">Loss</div>
+      <div class="heading col4">Income Account</div>
+    </div>
+    <div id="trans-credit-block" class="contents" data-bind="template:{name:'trans_entry_tmpl',foreach:incomeAccounts()}"></div>
+    <div>
+      <a class="button add-entry" onclick="TL_TransactionEditor.addEntry('income')"><span>+ Income/Loss</span></a>
+    </div>
+  </div>
+
+  <div class="trans-block" data-bind="visible: type() == 'income' || type() == 'fund_transfer' || type() == 'custom'">
+    <div>
+      <div class="heading col1">&nbsp;</div>
+      <div class="heading col2">Alloc</div>
+      <div class="heading col3">Percent</div>
+      <div class="heading col4">Fund:</div>
+    </div>
+
+    <div id="trans-alloc-block" class="contents" data-bind="template:{name:'trans_alloc_tmpl',foreach:allocs()}"></div>
+
+    <div style="clear: both">
+      <div class="heading col1">&nbsp;</div>
+      <div class="heading col2">ALLOCS</div>
+      <div class="heading col3">INCOME</div>
+    </div>
+    <div style="clear: both">
+      <div class="heading col1">&nbsp;</div>
+      <div class="total-amount col2" data-bind="amountContent:allocsTotal"></div>
+      <div class="total-amount col3" data-bind="amountContent:incomesTotal"></div>
+      <div class="total-match col4" data-bind="visible: allocsTotal() === incomesTotal()">All income allocated.</div>
+      <div class="total-mismatch col4" data-bind="visible: allocsTotal() !== incomesTotal()">Income/allocs UNEQUAL!</div>
+    </div>
+    <div style="clear: both" data-bind="visible: allocsTotal() !== incomesTotal()">
+      <div class="heading col1">&nbsp;</div>
+      <div class="total-amount col2" data-bind="amountContent: incomesTotal()-allocsTotal()"></div>
+      <div class="total-amount col3" data-bind="amountContent: allocsTotal()-incomesTotal()"></div>
+    </div>
+
+    <div>
+      <a class="button add-entry" onclick="TL_TransactionEditor.addAlloc()"><span>+ Allocation</span></a>
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+
+  <div class="trans-block" data-bind="visible: type() == 'loan' || type() == 'custom'">
+    <div>
+      <div class="heading col1">&nbsp;</div>
+      <div class="heading col2">Loan</div>
+      <div class="heading col3">Repay</div>
+      <div class="heading col4">Loan Account</div>
+    </div>
+    <div id="trans-credit-block" class="contents" data-bind="template:{name:'trans_entry_tmpl',foreach:loanAccounts()}"></div>
+    <div>
+      <a class="button add-entry" onclick="TL_TransactionEditor.addEntry('loan')"><span>+ Loan</span></a>
+    </div>
+  </div>
+
+  <div class="trans-block">
+    <div>
+      <div class="heading col1">&nbsp;</div>
+      <div class="heading col2">CREDITS</div>
+      <div class="heading col3">DEBITS</div>
+    </div>
+    <div style="clear: both">
+      <div class="heading col1">&nbsp;</div>
+      <div class="total-amount col2" data-bind="amountContent:creditsTotal"></div>
+      <div class="total-amount col3" data-bind="amountContent:debitsTotal"></div>
+      <div class="total-match col4" data-bind="visible: creditsTotal() === debitsTotal()">Credits/debits equal.</div>
+      <div class="total-mismatch col4" data-bind="visible: creditsTotal() !== debitsTotal()">Credits/debits UNEQUAL!</div>
+    </div>
+    <div style="clear: both" data-bind="visible: creditsTotal() !== debitsTotal()">
+      <div class="heading col1">&nbsp;</div>
+      <div class="total-amount col2" data-bind="amountContent: debitsTotal()-creditsTotal()"></div>
+      <div class="total-amount col3" data-bind="amountContent: creditsTotal()-debitsTotal()"></div>
+    </div>
+  </div>
+
+</div>  
+<div id="trans-data">
+  <div class="data-row"><div class="heading col1and2">Description</div><input name="description" class="col3and4" data-bind="value:description"></div>
+  <div class="data-row"><div class="heading col1and2">Location</div><input name="location" class="col3and4" data-bind="value:location"></div>
+  <div class="data-row"><div class="heading col1and2">Comment</div><input name="comments" class="col3and4" data-bind="value:comments"></div>
+  <div class="data-row">
+    <div class="trans-button"><a class="button" onclick="TL_TransactionEditor.hideEditor()"><span>Cancel</span></a></div>
+    <div class="trans-button"><a class="button" onclick="TL_TransactionEditor.saveTransaction()"><span>Save</span></a></div>
+  </div>
+</div>
+</script>
+
+<script type="text/html" id="UNUSED">
+  <div class="trans-block" data-bind="visible: credits().length">
+    <div><div class="heading col1">&nbsp;</div><div class="heading col2">Credit</div><div class="heading col3">From account:</div></div>
+    <div id="trans-credit-block" class="contents" data-bind="template:{name:'trans_entry_tmpl',foreach:credits,templateOptions:{type:'credits'}}"></div>
+    <div>
+      <a class="button" onclick="TL_TransactionEditor.addEntry('credits')"><span>+ Credit</span></a>
+      <div id="trans-credit-difference" class="total-amount total-mismatch" data-bind="amountContent:-1*debit_credit_difference(), visible: debit_credit_difference() != 0"></div>
+      <div id="trans-credit-total" class="total-amount" data-bind="amountContent:credits_total"></div>
+      <div class="total-label">TOTAL CREDITS...</div>
+    </div>
+  </div>
+  <div class="trans-block" data-bind="visible: debits().length">
+    <div><div class="heading col1">&nbsp;</div><div class="heading col2">Debit</div><div class="heading col3">To account:</div></div>
+    <div data-bind="template: {name:'debits_by_fund_tmpl',foreach:debits_by_fund}"></div>
+    <div>
+      <a class="button" onclick="TL_TransactionEditor.addEntry('debits')"><span>+ Debit</span></a>
+      <div id="trans-debit-difference" class="total-amount total-mismatch" data-bind="amountContent:debit_credit_difference, visible: debit_credit_difference() != 0"></div>
+      <div id="trans-debit-total" class="total-amount" data-bind="amountContent:debits_total"></div>
+      <div class="total-label">TOTAL DEBITS...</div>
+    </div>
+  </div>
+  <div class="trans-block" data-bind="visible: allocs().length || deallocs().length">
+    <div><div class="heading col1">&nbsp;</div><div class="heading col2">Allocation</div><div class="heading col3">To fund:</div></div>
+    <div id="trans-alloc-block" class="contents" data-bind="template:{name:'trans_alloc_tmpl',foreach:allocs,templateOptions:{type:'allocs'}}"></div>
+    <div>
+      <a class="button" onclick="TL_TransactionEditor.addEntry('allocs')"><span>+ Alloc</span></a>
+      <div id="trans-alloc-total" class="total-amount" data-bind="amountContent:allocs_total"></div>
+      <div class="total-label">Allocations...</div>
+    </div>
+    <div style="clear: both;"></div>
+    <div><div class="heading col1">&nbsp;</div><div class="heading col2">Deallocation</div><div class="heading col3">From fund:</div></div>
+    <div id="trans-dealloc-block" class="contents" data-bind="template:{name:'trans_alloc_tmpl',foreach:deallocs,templateOptions:{type:'deallocs'}}"></div>
+    <div>
+      <a class="button" onclick="TL_TransactionEditor.addEntry('deallocs')"><span>+ Dealloc</span></a>
+      <div id="trans-dealloc-total" class="total-amount" data-bind="amountContent:deallocs_total"></div>
+      <div class="total-label">Deallocations...</div>
+    </div>
+
+    <div style="clear: both">
+      <div id="trans-income-total" class="total-amount" data-bind="amountContent:income_total"></div>
+      <div class="total-label">TOTAL INCOME...</div>
+    </div>
+    <div style="clear: both">
+      <div id="alloc-income-difference" class="total-amount total-mismatch" data-bind="amountContent:alloc_income_difference, visible: alloc_income_difference() != 0"></div>
+      <div id="trans-allalloc-total" class="total-amount" data-bind="amountContent:allallocs_total"></div>
+      <div class="total-label">TOTAL ALLOCATIONS...</div>
+    </div>
+  </div>
+</script>
+
+<!-- EDITOR: Group debits by the entry's fund -->
+<script type="text/html" id="debits_by_fund_tmpl">
+  <div class="contents" data-bind="template:{name:'trans_entry_tmpl',foreach:entries,templateOptions:{type:'debits'}}"></div>
+  <div data-bind="visible: fund_name">Fund: <span data-bind="text: fund_name" /></div> 
+</script>
+
+<!-- EDITOR: A single credit/debit entry -->
+<script type="text/html" id="trans_entry_tmpl">
+<div class="trans-block-row">
+  <div class="trans-delete col1"><a class="x_button" data-bind="click:deleteEntry, visible: entryCount() > 1 || $parent.type() == 'custom'">&nbsp;</a></div>
+
+  <input class="col2 entry-amount" data-bind="amountValue: credit, attr:{disabled: !creditsAllowed() }, visible: creditPreset() == -9999999"></input>
+  <input class="col2 entry-amount" disabled data-bind="amountValue: creditPreset(), visible: creditPreset() != -9999999"></input>
+
+  <input class="col3 entry-amount" data-bind="amountValue: debit, attr:{disabled: !debitsAllowed() }, visible: debitPreset() == -9999999"></input>
+  <input class="col3 entry-amount" disabled data-bind="amountValue: debitPreset(), visible: debitPreset() != -9999999"></input>
+
+  <input class="col4 entry-account" data-bind="accountValue: account"></input>
+  <span style="float:right;" data-bind="visible: getAccountType() == 'expense'"><a class="button" data-bind="click: switchFund"><span>.</span></a></span>
+</div>
+</script>
+
+<!-- EDITOR: A single alloc/dealloc entry -->
+<script type="text/html" id="trans_alloc_tmpl">
+  <div class="trans-block-row">
+	<div class="trans-delete col1"><a class="x_button" data-bind="click: deleteAlloc, visible: allocCount()>1">&nbsp;</a></div>
+	<input class="col2 entry-amount" data-bind="amountValue: alloc"></input>
+	<span class="col3 entry-amount" style="display: inline-block; align: right" data-bind="percentText: allocPercentage"></span>
+	<input class="col4 entry-fund" data-bind="fundValue: fund"></input>
+  </div>
+</script>

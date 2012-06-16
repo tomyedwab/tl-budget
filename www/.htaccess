@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteRule ^api/(.*)$ script/api.php
+RewriteRule ^journal index.html
+RewriteRule ^income index.html
+

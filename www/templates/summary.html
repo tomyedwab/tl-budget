@@ -1,0 +1,18 @@
+<!-- This file is never actually navigated to.
+     It is loading using AJAX and used as a template set. -->
+
+<!-- SUMMARY: Top-level view -->
+<script type="text/x-handlebars-template" id="summary_tmpl">
+{{#each categories}}
+  <div>
+    Category: {{ category }}
+    {{#each accountsList}}
+      <div>Account: {{ accountName }}, Amount: {{ int_to_currency total }} ({{ month }})</div>
+    {{/each}}
+  </div>
+{{/each}}
+
+{{#each funds}}
+  <div>Fund: {{ fund }}, Amount: {{ int_to_currency total.running_total }} ({{ total.month }})</div>
+{{/each}}
+</script>

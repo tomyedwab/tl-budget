@@ -1,0 +1,84 @@
+<HTML>
+  <HEAD>
+    <TITLE>Tom &amp; Leslie's Budget</TITLE>
+    <LINK REL="stylesheet" TYPE="text/css" HREF="/style/jquery.ui.theme.css" />
+    <LINK REL="stylesheet" TYPE="text/css" HREF="/style/jquery.ui.base.css" />
+    <LINK REL="stylesheet" TYPE="text/css" HREF="/style/jquery.ui.core.css" />
+    <LINK REL="stylesheet" TYPE="text/css" HREF="/style/jquery.ui.dialog.css" />
+    <LINK REL="stylesheet" TYPE="text/css" HREF="/style/tl_budget.css" />
+
+    <LINK REL="shortcut icon" TYPE="image/x-icon" HREF="favicon.ico" /> 
+
+<!-- Non-minified versions-->
+
+<SCRIPT TYPE="text/javascript" SRC="/js/jquery/jquery-1.6.4.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/jquery/jquery.ui.core.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/jquery/jquery.ui.position.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/jquery/jquery.ui.widget.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/jquery/jquery.ui.mouse.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/jquery/jquery.ui.draggable.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/jquery/jquery.ui.resizable.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/jquery/jquery.ui.dialog.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/jquery/jquery.ui.autocomplete.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/jquery/jquery.ui.tabs.js"></SCRIPT>
+
+<!--<SCRIPT TYPE="text/javascript" SRC="js/knockout-1.2.1.js"></SCRIPT>-->
+<SCRIPT TYPE="text/javascript" SRC="/js/knockout-latest.debug.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/knockout-mapping.debug.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/tl_knockout.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript" SRC="/js/handlebars-1.0.0.beta.6.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/tl_handlebars.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript" SRC="/js/underscore.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/backbone.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript" SRC="/js/util_numerics.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/tl_budget.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/tl_data.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/tl_auth.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/tl_nav_view.js"></SCRIPT>
+
+<SCRIPT TYPE="text/javascript" SRC="/js/views/time_picker.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/views/journal.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/views/summary.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/views/expenses.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/views/incomes.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="/js/views/cash_transfers.js"></SCRIPT>
+
+<!-- Must be last -->
+<SCRIPT TYPE="text/javascript" SRC="/script/login.js.php"></SCRIPT>
+
+<!-- Minified versions
+<SCRIPT TYPE="text/javascript" SRC="/backbone/js-min/backbone.min.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="js-min/jqplot.min.js"></SCRIPT>
+<SCRIPT TYPE="text/javascript" SRC="js-min/budgetv5.min.js"></SCRIPT>
+-->
+
+  </HEAD>
+  <BODY>
+  
+  <div id="login-dialog" title="Log In" style="display: none">
+    <div class="login_column1">Username:</DIV><DIV class="login_column2"><INPUT type="text" id="login_username" PLACEHOLDER="Username"></INPUT></DIV>
+    <div class="login_column1">Password:</DIV><DIV class="login_column2"><INPUT type="password" id="login_password" PLACEHOLDER="Password"></INPUT></DIV>
+  </div>
+  <div id="login-progress" title="Logging in..." style="display: none">
+	<span id="login-status"></span>
+  </div>
+
+  <div id="content"></div>
+
+  <DIV ID="side_nav" STYLE="display: none;" CLASS="side_nav">
+    <DIV ID="logged_in">&nbsp;</DIV>
+    <A CLASS="nav_link" HREF="javascript: TL_Budget.router.navigate('journal', true);">
+      <DIV CLASS="nav_label journal_icon">Expense Journal</DIV>
+      <DIV CLASS="nav_icon journal_icon">&nbsp;</DIV>
+    </A>
+    <A CLASS="nav_link" HREF="javascript: TL_Budget.router.navigate('income', true);">
+      <DIV CLASS="nav_label income_icon">Income</DIV>
+      <DIV CLASS="nav_icon income_icon">&nbsp;</DIV>
+    </A>
+  </DIV>
+
+  </BODY>
+</HTML>

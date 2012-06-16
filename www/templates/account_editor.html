@@ -1,0 +1,17 @@
+<!-- This file is never actually navigated to.
+     It is loading using AJAX and used as a template set. -->
+
+<!-- ACCOUNT EDITOR: The account editor UI -->
+<script type="text/html" id="account_editor_main">
+<table>
+  <tr><td style="font-weight: bold">Name</td><td><input type="text" data-bind="value: name"></input></td></tr>
+  <tr><td style="font-weight: bold">Category</td><td><input type="text" data-bind="value: category"></input></td></tr>
+  <tr><td style="font-weight: bold">Type</td><td><select data-bind="value: type, attr:{disabled: typeLocked()}">
+    <option value="expense">Expense</option>
+    <option value="cash">Cash</option>
+    <option value="loan">Loan</option>
+    <option value="income">Income</option>
+  </select></td></tr>
+  <tr><td style="font-weight: bold">Fund</td><td><input type="text" data-bind="fundValue: fund, attr:{disabled: type() !== 'expense'}"></input></td></tr>
+</table>
+</script>
